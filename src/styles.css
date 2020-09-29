@@ -1,1 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+
+* {
+    box-sizing: border-box;
+}
+html{
+    height: 100%;
+}  
+
+body {
+    height:90%;
+    padding: 0;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRPbhA4rbzKk9nu62Aiv10-1P_KROaR9v7HrA&usqp=CAU');
+    background-size: cover;
+}
+
+main {
+    padding: 1rem;
+    margin: auto;
+}

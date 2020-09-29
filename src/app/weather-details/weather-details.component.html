@@ -1,0 +1,94 @@
+ 
+<div class="wrapper">
+    <div class="container">
+
+        <div class="header">
+        
+            <div class="serach-box">
+                <input type="text" [(ngModel)]="str" (input)="searchForCity($event.target.value)" (focus)="showWeatherBox=false; str=''" (blur)="str = 'search for city...'" >
+            </div>
+
+            <table class="table table-hover" *ngIf="!showWeatherBox">
+                <tbody>
+                    <cdk-virtual-scroll-viewport [itemSize]="15" >
+                        <tr *cdkVirtualFor="let location of locations$ | async ;" (click)="showLocationWeather(location.id, location.city, location.country)">
+                            <td >
+                                <strong>{{ location.city }}</strong >, {{ location.country }}
+                            </td>
+                        </tr>
+                    </cdk-virtual-scroll-viewport>
+                </tbody>
+            </table>
+    
+            <div class="spinner" *ngIf="isLoading">
+                <app-loading-spinner ></app-loading-spinner>   
+            </div>
+            
+            <div class="weatherBox"  *ngIf="showWeatherBox && !isLoading" > 
+                <div *ngIf="locationData$ | async as location">
+                    
+                    <div class="icon" >
+                        <i class="far fa-star fa-2x" style="cursor: pointer;" *ngIf="location.isFavorite == null || location.isFavorite == false" (click)="addToFavorite(location.id)"
+                        data-toggle="tooltip" title="Add to Favorite"></i>
+                        <i class="fa fa-star fa-2x" style="color: rgb(245, 245, 90);cursor: pointer;"
+                        data-toggle="tooltip" title="Remove from Favorite" *ngIf="location.isFavorite != null && location.isFavorite == true" (click)="removeFromFavorite(location.id)"></i>
+                    </div>
+                    <div class="label-wrapper">
+                        <label class="big-label">{{location.city}}, {{location.country}}</label> 
+                    </div>
+                    <div class="label-wrapper ">
+                        <label class="big-label" >{{getTemperature(location.celsius)}}  </label> 
+                    </div>
+                    <div class="small-img-wrapper">
+                        <img src="{{createIconURL(location.icon)}}">   
+                    </div>
+                    <div class="label-wrapper">
+                        <label class="big-label"  >{{location.info}}</label>
+                    </div>
+
+                    <div class="forecast" >
+                        <div *ngFor="let dayForecast of location.fiveDaysForecast" class="daily-forecast flip-card" >
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front">
+                                    <div class="label-wrapper">
+                                        <label >{{getDayName(dayForecast.date)}}</label>
+                                    </div>
+    
+                                    <div class="label-wrapper">
+                                        <label > {{getTemperature(dayForecast.maxTemp)}}  </label> 
+                                    </div>
+    
+                                    <div class="image-wrapper">
+                                        <img src="{{createIconURL(dayForecast.dayIcon)}}">   
+                                    </div>
+
+                                    <div class="label-wrapper">
+                                        <label >{{dayForecast.dayPhrase}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="flip-card-back">
+                                    <div class="label-wrapper">
+                                        <label >{{getDayName(dayForecast.date)}}</label>
+                                    </div>
+                                    <div class="label-wrapper">
+                                        <label > {{getTemperature(dayForecast.minTemp)}}  </label> 
+                                    </div>
+                                    <div class="image-wrapper">
+                                        <img src="{{createIconURL(dayForecast.nightIcon)}}">   
+                                    </div>
+
+                                    <div class="label-wrapper">
+                                        <label >{{dayForecast.nightPhrase}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+            
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

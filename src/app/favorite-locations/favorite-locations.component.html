@@ -1,0 +1,34 @@
+<div class="wrapper">
+    <div class="header">
+        <h2>Favorite Locations</h2>
+    </div>
+    <div class="container">
+        <article  *ngFor="let location of favoriteLocations$ | async;" class="card location-item" (click)="showCity(location)" 
+        data-toggle="tooltip" title="Click here for more details">
+            <header class="card-header">
+                <h1 class="location-title">
+                    {{location.city}}, {{location.country}}
+                </h1>
+            </header>
+     
+            <div class="label-wrapper">
+                <label >  {{getTemperature(location.celsius)}}  </label> 
+            </div>
+
+            <div class="icon-wrapper">
+                <img src="{{createIconURL(location.icon)}}">   
+            </div>
+
+            <div class="label-wrapper">
+                <label > {{location.info}}</label> 
+            </div>
+
+        
+        </article>
+
+        
+      
+    </div>
+
+</div>
+
