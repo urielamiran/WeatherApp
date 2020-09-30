@@ -4,6 +4,7 @@ import {Location} from '../state-management/model'
 import {Observable, of} from 'rxjs';
 import { Store } from '@ngrx/store';
 import { LoadAddToFavorite, LoadLocationData, LoadLocations, LoadRemoveFromFavorite } from '../state-management/actions';
+import { MiniService } from '../mini.service';
 
 @Component({
   selector: 'app-weather-details',
@@ -23,10 +24,17 @@ export class WeatherDetailsComponent implements OnInit {
 
 
 
-  constructor(private store: Store<fromApp.AppState>){}
+  constructor(private store: Store<fromApp.AppState>, private miniService: MiniService){}
   ngOnInit() {
-    this.store.select('locations').subscribe( state => {
+    
+    this.miniService.defaultCity.subscribe(deafultCity =>{
+      this.store.dispatch(new LoadLocationData(deafultCity));
+    })
+   
 
+    this.store.select('locations').subscribe(state => {
+     
+     
       this.locations$ = of(state.locations);
       this.locationData$ = of(state.location);
       this.locationData$.subscribe(() =>{
@@ -37,10 +45,12 @@ export class WeatherDetailsComponent implements OnInit {
         this.isCelsiusMode = isCelsiusMode;
       });
 
-      if(state.location == null){
-        this.store.dispatch(new LoadLocationData(this.deafultCity));
-      }
+  
     });
+
+
+
+
 
   }
 

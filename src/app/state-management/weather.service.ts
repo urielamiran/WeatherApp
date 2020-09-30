@@ -11,7 +11,7 @@ export class WeatherService {
 
   private apiKey = "yZkKlxztP6SG1gcVygwVC5lflPitzBBc";
   // private apiKey = "RoxxSq40yy88xQrUNRNM4wNS2GlHy5r2"
-  private baseURL = "http://dataservice.accuweather.com/";
+  private baseURL = "https://dataservice.accuweather.com/";
   private positionAPI = "/locations/v1/cities/";
   private conditionAPI = "/currentconditions/v1/";
   private forecastAPI = "/forecasts/v1/daily/5day/";

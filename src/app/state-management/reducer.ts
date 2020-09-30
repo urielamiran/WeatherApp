@@ -5,6 +5,7 @@ export interface State {
   locations: Location[];
   favorites: Location[];
   location: Location;
+ 
   error: any;
   isCelsiusMode: boolean;
 }
@@ -13,6 +14,7 @@ const initialState: State = {
   locations: [],
   favorites: [],
   location: null,
+ 
   error: null,
   isCelsiusMode: true
 }

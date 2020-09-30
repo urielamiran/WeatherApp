@@ -5,6 +5,7 @@ import {Observable, of} from 'rxjs';
 import {Location} from '../state-management/model'
 import { LoadLocationData } from '../state-management/actions';
 import { Router } from '@angular/router';
+import { MiniService } from '../mini.service';
 
 @Component({
   selector: 'app-favorite-locations',
@@ -15,7 +16,7 @@ export class FavoriteLocationsComponent implements OnInit {
 
   favoriteLocations$ : Observable<Location[]>;
   isCelsiusMode: boolean = true;
-  constructor(private store: Store<fromApp.AppState>,  private router: Router){}
+  constructor(private store: Store<fromApp.AppState>,  private router: Router, private miniService: MiniService){}
 
   ngOnInit() {
     this.store.select('locations').subscribe(state => {
@@ -28,6 +29,7 @@ export class FavoriteLocationsComponent implements OnInit {
 
   showCity(location: Location){
     this.store.dispatch(new LoadLocationData({id: location.id, city: location.city, country: location.country}))
+    this.miniService.defaultCity.next({id: location.id, city: location.city, country: location.country})
     this.router.navigate(['/weather']);
   }
  
