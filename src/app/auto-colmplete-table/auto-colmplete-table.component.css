@@ -1,0 +1,14 @@
+.cdk-virtual-scroll-viewport{
+    height: 300px;
+}
+tbody, thead, tr{
+    display: block;
+} 
+
+td{
+    display: block;
+    width: 100%;
+    font-size: large;
+    text-align: center;
+    cursor: pointer;
+}

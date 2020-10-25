@@ -4,7 +4,7 @@ import {  Observable, of} from 'rxjs';
 import {Action } from '@ngrx/store'
 import {Location} from '../state-management/model'
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { ActionTypes, LoadAddToFavorite, LoadAddToFavoriteFail, LoadAddToFavoriteSuccess, LoadLocationData, LoadLocationDataFail, LoadLocationDataSuccess, LoadLocations, LoadLocationsFail, LoadLocationsSuccess, LoadRemoveFromFavorite, LoadRemoveFromFavoriteFail, LoadRemoveFromFavoriteSuccess } from './actions';
+import { ActionTypes, LoadAddToFavorite, LoadAddToFavoriteFail, LoadAddToFavoriteSuccess, LoadAutoComplete, LoadAutoCompleteFail, LoadAutoCompleteSuccess, LoadLocationData, LoadLocationDataFail, LoadLocationDataSuccess, LoadLocations, LoadLocationsFail, LoadLocationsSuccess, LoadRemoveFromFavorite, LoadRemoveFromFavoriteFail, LoadRemoveFromFavoriteSuccess } from './actions';
 import { WeatherService } from './weather.service';
 
 @Injectable()
@@ -50,6 +50,13 @@ export class WeatherEffects {
     ofType(ActionTypes.LoadRemoveFromFavorite),
     map((action: LoadRemoveFromFavorite) => new LoadRemoveFromFavoriteSuccess(action.payload)),
       catchError(() => of(new LoadRemoveFromFavoriteFail('Failed to remove this location from the Favorite')))
+  );
+
+  @Effect()
+  loadAutoComplete$ : Observable<Action> = this.actions$.pipe(
+    ofType(ActionTypes.LoadAutoComplete),
+    map((action: LoadAutoComplete) => new LoadAutoCompleteSuccess(action.payload)),
+      catchError(() => of(new LoadAutoCompleteFail('Failed to load locations to Autocomplete array')))
   );
 
 }

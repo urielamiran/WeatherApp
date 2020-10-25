@@ -1,0 +1,13 @@
+<div *ngIf="weather$ | async as data">
+    <table class="table table-hover" >
+        <tbody >
+            <cdk-virtual-scroll-viewport [itemSize]="15" >
+                <tr *cdkVirtualFor="let location of data.autoComplete ;" (click)="showLocationWeather(location.id, location.city, location.country)">
+                    <td >
+                        <strong>{{ location.city }}</strong >, {{ location.country }}
+                    </td>
+                </tr>
+            </cdk-virtual-scroll-viewport>
+        </tbody>
+    </table>
+</div>

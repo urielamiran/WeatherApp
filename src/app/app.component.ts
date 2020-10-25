@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import * as fromApp from './app.reducer'
 import { Store } from '@ngrx/store';
 import { of} from 'rxjs';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { LoadCelsiusMode, LoadFahrenheitMode } from './state-management/actions';
 
 declare var $:any;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

@@ -8,6 +8,10 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import {  HttpClientModule } from '@angular/common/http';
 import { WeatherDetailsComponent } from './weather-details/weather-details.component';
+import { AutoColmpleteTableComponent } from './auto-colmplete-table/auto-colmplete-table.component';
+
+import { HomeComponent } from './home/home.component';
+
 import { FavoriteLocationsComponent } from './favorite-locations/favorite-locations.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -15,11 +19,12 @@ import { WeatherEffects } from './state-management/effect';
 import * as fromApp from './app.reducer';
 import {storageMetaReducer} from './storage.neta-reducer';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 const routes : Routes = [
-    {path: 'weather', component: WeatherDetailsComponent},
+    {path: 'home', component: HomeComponent},
     {path: 'favorite-locations', component: FavoriteLocationsComponent},
-    {path: '**', redirectTo: '/' , pathMatch: 'full'}
+    {path: '**', redirectTo: '/home' , pathMatch: 'full'}
 ]
 
 @NgModule({
@@ -27,7 +32,10 @@ const routes : Routes = [
     AppComponent,
     WeatherDetailsComponent,
     FavoriteLocationsComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    AutoColmpleteTableComponent,
+    HomeComponent
+  
   ],
   imports: [
     CommonModule,
@@ -36,6 +44,7 @@ const routes : Routes = [
     BrowserAnimationsModule,
     ScrollingModule,
     FormsModule,
+    MatAutocompleteModule,
     RouterModule.forRoot(routes),
     StoreModule.forRoot(fromApp.appReducer, 
       { 

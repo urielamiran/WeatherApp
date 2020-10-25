@@ -1,0 +1,14 @@
+ 
+<div class="wrapper" >
+    <div class="container">
+        <div class="header">
+            <div  *ngIf="(weather$ | async).locations as locations">
+                <div class="serach-box">
+                    <input #input type="text" placeholder="search for city..." (input)="searchForCity($event.target.value, locations)" (focus)="showWeatherBox=false; input.placeholder=''" (blur)="input.placeholder = 'search for city...'" >
+                </div>
+                <auto-colmplete-table (showWeather)="showWeatherBox = true" *ngIf="!showWeatherBox"></auto-colmplete-table>
+            </div>
+            <app-weather-details *ngIf="showWeatherBox"></app-weather-details>
+        </div>
+    </div>
+</div>

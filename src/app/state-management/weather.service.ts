@@ -9,8 +9,8 @@ import {Location, DailyForecast} from './model'
 })
 export class WeatherService {
 
-  private apiKey = "yZkKlxztP6SG1gcVygwVC5lflPitzBBc";
-  // private apiKey = "RoxxSq40yy88xQrUNRNM4wNS2GlHy5r2"
+  // private apiKey = "yZkKlxztP6SG1gcVygwVC5lflPitzBBc";
+  private apiKey = "RoxxSq40yy88xQrUNRNM4wNS2GlHy5r2"
   private baseURL = "https://dataservice.accuweather.com/";
   private positionAPI = "/locations/v1/cities/";
   private conditionAPI = "/currentconditions/v1/";
@@ -18,6 +18,7 @@ export class WeatherService {
   constructor(private http: HttpClient) {}
 
   getLocations(payload: string): Observable<Location[]> {
+    console.log('service called')
     return this.http
       .get<Location[]>(`${this.baseURL}${this.positionAPI + "autocomplete"}?apikey=${this.apiKey}&q=${payload}`)
       .pipe(
@@ -42,7 +43,6 @@ export class WeatherService {
   }
 
   getWeatherData(id: number): Observable<Location> {
-    let s = []
    return forkJoin({
       currentWeather: this.http.get(`${this.baseURL}${this.conditionAPI}${id}?apikey=${this.apiKey}&details=false`),
       weatherForecast: this.http.get(`${this.baseURL}${this.forecastAPI}${id}?apikey=${this.apiKey}&details=false&metric=${true}`  )

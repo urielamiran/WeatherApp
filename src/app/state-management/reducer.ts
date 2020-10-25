@@ -3,31 +3,74 @@ import {Location} from '../state-management/model'
 
 export interface State {
   locations: Location[];
+  autoComplete: Location[];
   favorites: Location[];
   location: Location;
  
   error: any;
-  isCelsiusMode: boolean;
+  celsiusMode: string;
 }
 
 const initialState: State = {
   locations: [],
+  autoComplete: [],
   favorites: [],
   location: null,
  
   error: null,
-  isCelsiusMode: true
+  celsiusMode: 'celsius'
 }
+
+
+function getUnique(arr, comp) {
+
+  // store the comparison  values in array
+const unique =  arr.map(e => e[comp])
+
+// store the indexes of the unique objects
+.map((e, i, final) => final.indexOf(e) === i && i)
+
+// eliminate the false indexes & return unique objects
+.filter((e) => arr[e]).map(e => arr[e]);
+
+return unique;
+}
+
+function compare(a, b) {
+  // Use toUpperCase() to ignore character casing
+  if(a != undefined && b != undefined){
+    const bandA = a.city.toUpperCase();
+  const bandB = b.city.toUpperCase();
+
+  let comparison = 0;
+  if (bandA > bandB) {
+    comparison = 1;
+  } else if (bandA < bandB) {
+    comparison = -1;
+  }
+  return comparison;
+  }
+}
+
 
 export function WeatherReducer(state = initialState, action: ActionsUnion) {
   let location;
   switch (action.type) {
     case ActionTypes.LoadLocationsSuccess:
+   
       return {
         ...state,
-        locations: [...action.payload],
+        locations: [...getUnique([...state.locations, ...action.payload],'id')],
+        autoComplete: [...[...action.payload].sort(compare)],
         error: null
       }
+
+    case ActionTypes.LoadAutoCompleteSuccess:
+ 
+      return {
+        ...state,
+        autoComplete: [...[...action.payload].sort(compare)]
+      }  
 
     case ActionTypes.LoadLocationDataSuccess:
       location = action.payload.location;
@@ -82,20 +125,21 @@ export function WeatherReducer(state = initialState, action: ActionsUnion) {
     case ActionTypes.LoadCelsiusMode:
       return {
         ...state,
-        isCelsiusMode: true
+        celsiusMode: 'celsius'
       } 
 
     case ActionTypes.LoadFahrenheitMode:
       return {
         ...state,
-        isCelsiusMode: false
+        celsiusMode: 'fahrenheit'
       } 
 
 
     default:
       return {
         ...state,
-        error: null
+        error: null,
+        celsiusMode: 'celsius'
       };
   }
 }

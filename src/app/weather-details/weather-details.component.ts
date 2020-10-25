@@ -1,10 +1,11 @@
-import {Component, OnInit } from '@angular/core';
-import * as fromApp from '../app.reducer'
-import {Location} from '../state-management/model'
-import {Observable, of} from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { LoadAddToFavorite, LoadLocationData, LoadLocations, LoadRemoveFromFavorite } from '../state-management/actions';
-import { MiniService } from '../mini.service';
+import { LoadAddToFavorite, LoadRemoveFromFavorite } from '../state-management/actions';
+import * as fromApp from '../app.reducer';
+import {Location} from '../state-management/model'
+
+import {Observable} from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-weather-details',
@@ -12,75 +13,28 @@ import { MiniService } from '../mini.service';
   styleUrls: ['./weather-details.component.css']
 })
 export class WeatherDetailsComponent implements OnInit {
-
-  locations$: Observable<Location[]>;
-  locationData$ : Observable<Location>;
   days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  deafultCity: {id: number, city: string, country: string} = {id: 215854, city: 'Tel Aviv', country: 'Israel'}
-  showWeatherBox : boolean = true;
-  isLoading: boolean = true;
-  isCelsiusMode: boolean = true;
-  str: string = "search for city...";
 
-
-
-  constructor(private store: Store<fromApp.AppState>, private miniService: MiniService){}
-  ngOnInit() {
-    
-    this.miniService.defaultCity.subscribe(deafultCity =>{
-      this.store.dispatch(new LoadLocationData(deafultCity));
-    })
-   
-
-    this.store.select('locations').subscribe(state => {
-     
-     
-      this.locations$ = of(state.locations);
-      this.locationData$ = of(state.location);
-      this.locationData$.subscribe(() =>{
-        this.isLoading = false;
-      }); 
-
-      of(state.isCelsiusMode).subscribe(isCelsiusMode =>{
-        this.isCelsiusMode = isCelsiusMode;
-      });
-
-  
-    });
-
-
-
-
-
+  constructor(private store: Store<fromApp.AppState>) { }
+  weather$ : Observable<{location: Location,  celsiusMode: string}>;
+  isReady$;
+  loading = true
+  ngOnInit(): void {
+    this.weather$ = this.store.select('locations')
   }
 
-  
   getDayName(day: string){
     let dayCode = new Date(day).getDay();
     return this.days[dayCode];
   }
-  
-  showLocationWeather(id : number, city: string, country: string){
-    this.store.dispatch(new LoadLocationData({id: id, city: city, country: country}))
-    this.isLoading = true
-    this.showWeatherBox = !this.showWeatherBox;
-    this.str = city ;
-  }
-
-  searchForCity(str: string){
-    if(str != ''){
-      this.store.dispatch(new LoadLocations(str))
-    }
-
-  }
 
   addToFavorite(cityId: number){
-    console.log(cityId)
+    // console.log(cityId)
     this.store.dispatch(new LoadAddToFavorite(cityId))
   }
 
   removeFromFavorite(cityId: number){
-    console.log(cityId)
+    // console.log(cityId)
     this.store.dispatch(new LoadRemoveFromFavorite(cityId))
   }
 
@@ -88,8 +42,9 @@ export class WeatherDetailsComponent implements OnInit {
     return "https://developer.accuweather.com/sites/default/files/" + (icon < 10 ? "0" : "") + icon + "-s.png";
   }
 
-  getTemperature(temperature: number){
-    if(this.isCelsiusMode){
+  getTemperature(temperature: number, mode: string){
+    // console.log(mode)
+    if(mode == 'celsius'){
       return Math.round(temperature) + '\xB0  c'
     }else{
       let fahrenheit = temperature*9/5 + 32;
